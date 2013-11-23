@@ -3,6 +3,10 @@ from protobuf_delim import delimited
 import simplox_pb2
 from functools import partial
 import sys
+import logging
+from time import time
+
+log = logging.getLogger(__name__)
 
 CONTENT_TYPE = "application/protobuf+vnd.simplox.multirequest"
 ACCEPT = "application/protobuf+delimited+vnd.simplox.response"
@@ -14,21 +18,17 @@ def multirequest(*requests):
     return msg
 
 
-def request(method, url, headers=None, content_type=None, body=None):
+def request(method, url, headers=None, content_type=None, body=None, key=None):
     msg = simplox_pb2.Request()
     msg.method = method
     msg.url = url
 
-    maybe(headers, 
-          lambda _: msg.headers.extend(headers))
-
-    maybe(content_type,
-          lambda _: setattr(msg, "content_type", content_type))
-
-    maybe(body,
-          lambda _: setattr(msg, "body", body))
+    maybe_setattr(msg, "content_type", content_type)
+    maybe_setattr(msg, "body", body)
+    maybe_setattr(msg, "key", key)
 
     return msg
+
 
 head = partial(request, "head")
 get = partial(request, "get")
@@ -36,9 +36,21 @@ put = partial(request, "put")
 post = partial(request, "post")
 delete = partial(request, "delete")
 
+
 def maybe(val, f):
     if val is not None:
         return f(val)
+
+
+def default(val, f):
+    if val is not None:
+        return val
+    else:
+        return f()
+
+
+def maybe_setattr(obj, key, val):
+    return maybe(val, lambda _: setattr(obj, key, val))
 
 
 def header(key, value):
@@ -66,16 +78,38 @@ def fetch(endpoint, mr):
     if resp.status_code != 200:
         raise MultiRequestError(resp)
     
+    start = time()
     for packet in delimited(resp.raw):
         msg = simplox_pb2.Response()
         msg.ParseFromString(packet)
+
+        elapsed = time() - start
+        start = time()
+        sync_time = _request_time(msg)
+        diff = sync_time - elapsed
+
+        log.debug("{0} {sync_time:.2f} - {elapsed:.2f} = {diff:.2f}".format(msg.url, **locals()))
         yield msg
 
 
+def _request_time(msg):
+    def header_request_time():
+        header = (h for h in msg.headers if h.key == "X-Request-Time").next()
+        return int(header.value.rstrip(" us")) / 1000000.0
+
+    return default(
+        getattr(msg, "request_time", None),
+        header_request_time)
+
+
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+
     endpoint = sys.argv[1]
     urls = sys.argv[2:]
     mr = multirequest(*map(get, urls))
 
+    start = time()
     for data in fetch(endpoint, mr):
-        print data.url
+        pass
+

@@ -4,5 +4,8 @@ setup(
     name="simplox-client",
     version="0.1",
     description="A client for simplox",
-    packages=find_packages()
+    packages=find_packages(),
+    install_requires=[
+        "protobuf>=2,<3"
+    ]
 )
