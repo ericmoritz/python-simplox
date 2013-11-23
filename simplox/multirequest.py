@@ -83,23 +83,13 @@ def fetch(endpoint, mr):
         msg = simplox_pb2.Response()
         msg.ParseFromString(packet)
 
-        elapsed = time() - start
+        elapsed = (time() - start) * 1000.0
         start = time()
-        sync_time = _request_time(msg)
+        sync_time = msg.request_time / 1000.0
         diff = sync_time - elapsed
 
         log.debug("{0} {sync_time:.2f} - {elapsed:.2f} = {diff:.2f}".format(msg.url, **locals()))
         yield msg
-
-
-def _request_time(msg):
-    def header_request_time():
-        header = (h for h in msg.headers if h.key == "X-Request-Time").next()
-        return int(header.value.rstrip(" us")) / 1000000.0
-
-    return default(
-        getattr(msg, "request_time", None),
-        header_request_time)
 
 
 if __name__ == '__main__':

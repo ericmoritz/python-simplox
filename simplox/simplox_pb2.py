@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='simplox.proto',
   package='simplox',
-  serialized_pb='\n\rsimplox.proto\x12\x07simplox\"2\n\x0cMultiRequest\x12\"\n\x08requests\x18\x01 \x03(\x0b\x32\x10.simplox.Request\"~\n\x07Request\x12\x0b\n\x03url\x18\x01 \x02(\x0c\x12\x13\n\x06method\x18\x02 \x01(\x0c:\x03get\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x14\n\x0c\x63ontent_type\x18\x04 \x01(\x0c\x12\x0c\n\x04\x62ody\x18\x05 \x01(\x0c\x12\x0b\n\x03key\x18\x06 \x01(\x0c\"$\n\x06Header\x12\x0b\n\x03key\x18\x01 \x02(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"d\n\x08Response\x12\x0e\n\x06status\x18\x01 \x02(\x0c\x12\x0b\n\x03url\x18\x02 \x02(\x0c\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x0c\n\x04\x62ody\x18\x04 \x01(\x0c\x12\x0b\n\x03key\x18\x05 \x01(\x0c')
+  serialized_pb='\n\rsimplox.proto\x12\x07simplox\"2\n\x0cMultiRequest\x12\"\n\x08requests\x18\x01 \x03(\x0b\x32\x10.simplox.Request\"~\n\x07Request\x12\x0b\n\x03url\x18\x01 \x02(\x0c\x12\x13\n\x06method\x18\x02 \x01(\x0c:\x03get\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x14\n\x0c\x63ontent_type\x18\x04 \x01(\x0c\x12\x0c\n\x04\x62ody\x18\x05 \x01(\x0c\x12\x0b\n\x03key\x18\x06 \x01(\x0c\"$\n\x06Header\x12\x0b\n\x03key\x18\x01 \x02(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"\x8a\x01\n\x08Response\x12\x0e\n\x06status\x18\x01 \x02(\x0c\x12\x0b\n\x03url\x18\x02 \x02(\x0c\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x0c\n\x04\x62ody\x18\x04 \x01(\x0c\x12\x0b\n\x03key\x18\x05 \x01(\x0c\x12\x14\n\x0crequest_time\x18\x06 \x01(\r\x12\x0e\n\x06method\x18\x07 \x01(\x0c')
 
 
 
@@ -186,6 +186,20 @@ _RESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='request_time', full_name='simplox.Response.request_time', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='method', full_name='simplox.Response.method', index=6,
+      number=7, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -195,8 +209,8 @@ _RESPONSE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=244,
-  serialized_end=344,
+  serialized_start=245,
+  serialized_end=383,
 )
 
 _MULTIREQUEST.fields_by_name['requests'].message_type = _REQUEST
