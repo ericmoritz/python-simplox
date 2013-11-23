@@ -2,6 +2,7 @@ import requests
 from protobuf_delim import delimited
 import simplox_pb2
 from functools import partial
+from itertools import imap
 import sys
 import logging
 from time import time
@@ -77,17 +78,22 @@ def fetch(endpoint, mr):
 
     if resp.status_code != 200:
         raise MultiRequestError(resp)
-    
-    start = time()
-    for packet in delimited(resp.raw):
+
+    def tc_iter(iterator):
+        start = time()
+        for item in iterator:
+            end = time()
+            yield ((end - start) * 1000.0, item)
+            start = time()
+
+    def response(packet):
         msg = simplox_pb2.Response()
         msg.ParseFromString(packet)
-
-        elapsed = (time() - start) * 1000.0
-        start = time()
+        return msg
+    
+    for elapsed, msg in tc_iter(imap(response, delimited(resp.raw))):
         sync_time = msg.request_time / 1000.0
         diff = sync_time - elapsed
-
         log.debug("{0} {sync_time:.2f} - {elapsed:.2f} = {diff:.2f}".format(msg.url, **locals()))
         yield msg
 
@@ -99,7 +105,6 @@ if __name__ == '__main__':
     urls = sys.argv[2:]
     mr = multirequest(*map(get, urls))
 
-    start = time()
     for data in fetch(endpoint, mr):
         pass
 
