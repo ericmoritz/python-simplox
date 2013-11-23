@@ -13,9 +13,10 @@ CONTENT_TYPE = "application/protobuf+vnd.simplox.multirequest"
 ACCEPT = "application/protobuf+delimited+vnd.simplox.response"
 
 
-def multirequest(*requests):
+def multirequest(*requests, **kwargs):
     msg = simplox_pb2.MultiRequest()
     msg.requests.extend(requests)
+    maybe_setattr(msg, "batch_key", kwargs.get("batch_key"))
     return msg
 
 
