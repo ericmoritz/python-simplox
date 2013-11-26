@@ -116,5 +116,5 @@ if __name__ == '__main__':
     mr = multirequest(*[get(url, cache=cache(url, 10)) for url in urls])
 
     for data in fetch(endpoint, mr):
-        print data.body
+        pass
 
