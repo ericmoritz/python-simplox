@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='simplox.proto',
   package='simplox',
-  serialized_pb='\n\rsimplox.proto\x12\x07simplox\"E\n\x0cMultiRequest\x12\"\n\x08requests\x18\x01 \x03(\x0b\x32\x10.simplox.Request\x12\x11\n\tbatch_key\x18\x02 \x01(\x0c\"~\n\x07Request\x12\x0b\n\x03url\x18\x01 \x02(\x0c\x12\x13\n\x06method\x18\x02 \x01(\x0c:\x03get\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x14\n\x0c\x63ontent_type\x18\x04 \x01(\x0c\x12\x0c\n\x04\x62ody\x18\x05 \x01(\x0c\x12\x0b\n\x03key\x18\x06 \x01(\x0c\"$\n\x06Header\x12\x0b\n\x03key\x18\x01 \x02(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"\x9d\x01\n\x08Response\x12\x0e\n\x06status\x18\x01 \x02(\x0c\x12\x0b\n\x03url\x18\x02 \x02(\x0c\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x0c\n\x04\x62ody\x18\x04 \x01(\x0c\x12\x0b\n\x03key\x18\x05 \x01(\x0c\x12\x14\n\x0crequest_time\x18\x06 \x01(\r\x12\x0e\n\x06method\x18\x07 \x01(\x0c\x12\x11\n\tbatch_key\x18\x08 \x01(\x0c')
+  serialized_pb='\n\rsimplox.proto\x12\x07simplox\"2\n\x0cMultiRequest\x12\"\n\x08requests\x18\x01 \x03(\x0b\x32\x10.simplox.Request\"\x9d\x01\n\x07Request\x12\x0b\n\x03url\x18\x01 \x02(\x0c\x12\x13\n\x06method\x18\x02 \x01(\x0c:\x03get\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x14\n\x0c\x63ontent_type\x18\x04 \x01(\x0c\x12\x0c\n\x04\x62ody\x18\x05 \x01(\x0c\x12\x0b\n\x03key\x18\x06 \x01(\x0c\x12\x1d\n\x05\x63\x61\x63he\x18\x07 \x01(\x0b\x32\x0e.simplox.Cache\"%\n\x05\x43\x61\x63he\x12\x0b\n\x03key\x18\x01 \x02(\x0c\x12\x0f\n\x07timeout\x18\x02 \x02(\r\"$\n\x06Header\x12\x0b\n\x03key\x18\x01 \x02(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"\x8a\x01\n\x08Response\x12\x0e\n\x06status\x18\x01 \x02(\x0c\x12\x0b\n\x03url\x18\x02 \x02(\x0c\x12 \n\x07headers\x18\x03 \x03(\x0b\x32\x0f.simplox.Header\x12\x0c\n\x04\x62ody\x18\x04 \x01(\x0c\x12\x0b\n\x03key\x18\x05 \x01(\x0c\x12\x14\n\x0crequest_time\x18\x06 \x01(\r\x12\x0e\n\x06method\x18\x07 \x01(\x0c')
 
 
 
@@ -30,13 +30,6 @@ _MULTIREQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-    descriptor.FieldDescriptor(
-      name='batch_key', full_name='simplox.MultiRequest.batch_key', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value="",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
   ],
   extensions=[
   ],
@@ -47,7 +40,7 @@ _MULTIREQUEST = descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=26,
-  serialized_end=95,
+  serialized_end=76,
 )
 
 
@@ -100,6 +93,13 @@ _REQUEST = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='cache', full_name='simplox.Request.cache', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -109,8 +109,43 @@ _REQUEST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=97,
-  serialized_end=223,
+  serialized_start=79,
+  serialized_end=236,
+)
+
+
+_CACHE = descriptor.Descriptor(
+  name='Cache',
+  full_name='simplox.Cache',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='key', full_name='simplox.Cache.key', index=0,
+      number=1, type=12, cpp_type=9, label=2,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='timeout', full_name='simplox.Cache.timeout', index=1,
+      number=2, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=238,
+  serialized_end=275,
 )
 
 
@@ -144,8 +179,8 @@ _HEADER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=225,
-  serialized_end=261,
+  serialized_start=277,
+  serialized_end=313,
 )
 
 
@@ -205,13 +240,6 @@ _RESPONSE = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-    descriptor.FieldDescriptor(
-      name='batch_key', full_name='simplox.Response.batch_key', index=7,
-      number=8, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value="",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
   ],
   extensions=[
   ],
@@ -221,15 +249,17 @@ _RESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=264,
-  serialized_end=421,
+  serialized_start=316,
+  serialized_end=454,
 )
 
 _MULTIREQUEST.fields_by_name['requests'].message_type = _REQUEST
 _REQUEST.fields_by_name['headers'].message_type = _HEADER
+_REQUEST.fields_by_name['cache'].message_type = _CACHE
 _RESPONSE.fields_by_name['headers'].message_type = _HEADER
 DESCRIPTOR.message_types_by_name['MultiRequest'] = _MULTIREQUEST
 DESCRIPTOR.message_types_by_name['Request'] = _REQUEST
+DESCRIPTOR.message_types_by_name['Cache'] = _CACHE
 DESCRIPTOR.message_types_by_name['Header'] = _HEADER
 DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
 
@@ -244,6 +274,12 @@ class Request(message.Message):
   DESCRIPTOR = _REQUEST
   
   # @@protoc_insertion_point(class_scope:simplox.Request)
+
+class Cache(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _CACHE
+  
+  # @@protoc_insertion_point(class_scope:simplox.Cache)
 
 class Header(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType

@@ -19,8 +19,10 @@ def multirequest(*requests, **kwargs):
     maybe_setattr(msg, "batch_key", kwargs.get("batch_key"))
     return msg
 
+def cache(key, timeout):
+    return {'key': key, 'timeout': timeout}
 
-def request(method, url, headers=None, content_type=None, body=None, key=None):
+def request(method, url, headers=None, content_type=None, body=None, key=None, cache=None):
     msg = simplox_pb2.Request()
     msg.method = method
     msg.url = url
@@ -28,6 +30,8 @@ def request(method, url, headers=None, content_type=None, body=None, key=None):
     maybe_setattr(msg, "content_type", content_type)
     maybe_setattr(msg, "body", body)
     maybe_setattr(msg, "key", key)
+
+    maybe(cache, lambda _: _update_cache(msg, cache))
 
     return msg
 
@@ -49,6 +53,11 @@ def default(val, f):
         return val
     else:
         return f()
+
+
+def _update_cache(msg, cache):
+    msg.cache.key = cache['key']
+    msg.cache.timeout = cache['timeout']
 
 
 def maybe_setattr(obj, key, val):
@@ -104,7 +113,7 @@ if __name__ == '__main__':
 
     endpoint = sys.argv[1]
     urls = sys.argv[2:]
-    mr = multirequest(*map(get, urls))
+    mr = multirequest(*[get(url, cache=cache(url, 10)) for url in urls])
 
     for data in fetch(endpoint, mr):
         pass
