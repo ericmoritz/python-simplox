@@ -32,6 +32,7 @@ def request(method, url, headers=None, content_type=None, body=None, key=None, c
     maybe_setattr(msg, "key", key)
 
     maybe(cache, lambda _: _update_cache(msg, cache))
+    maybe(headers, lambda _: msg.headers.extend(headers))
 
     return msg
 
